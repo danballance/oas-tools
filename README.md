@@ -1,5 +1,7 @@
 # OAS Tools
 
+![Travis (.org)](https://img.shields.io/travis/danballance/oas-tools.svg)
+
 OAS Tools is a PHP library for working with Open API Specifications in both version 2 
 and version 3 formats.
 
