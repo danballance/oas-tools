@@ -1,0 +1,64 @@
+{
+    "name": "danballance/oas-tools",
+    "description": "PHP tools for working with Open API Specifications (version 2 and 3).",
+    "type": "library",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/danballance/oas-tools/issues?state=open",
+        "forum": "https://gitter.im/danballance/oas-tools",
+        "source": "https://github.com/danballance/oas-tools"
+    },
+    "keywords": [
+        "swagger",
+        "oai",
+        "oas",
+        "oas2",
+        "oas3",
+        "open api",
+        "open api initiative",
+        "open api specification"
+    ],
+    "authors": [
+        {
+            "name": "Dan Ballance",
+            "email": "work@danballance.uk",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.1",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^6.3",
+        "jshannon63/jsoncollect": "^1.2",
+        "flow/jsonpath": "^0.4.0",
+        "tightenco/collect": "^5.6",
+        "erusev/parsedown": "^1.7",
+        "nicmart/tree": "^0.2.7",
+        "symfony/yaml": "^4.1"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.4",
+        "phpunit/phpunit": "^8.1",
+        "phpmd/phpmd": "@stable"
+    },
+    "autoload": {
+        "psr-4": {
+            "DanBallance\\OasTools\\": "./src/OasTools"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DanBallance\\OasTools\\": "./src/OasTools"
+        }
+    },
+    "config": {
+        "preferred-install": {
+            "*": "auto"
+        }
+    },
+    "scripts": {
+        "phpcs": "phpcs --standard=PSR2"
+    }
+}

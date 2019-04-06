@@ -1,0 +1,91 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Definition References"
+  },
+  "definitions": {
+    "Character": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Wizard": {
+      "type": "object",
+      "required": [
+        "magic"
+      ],
+      "properties": {
+        "magic": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "Warrior": {
+      "type": "object",
+      "required": [
+        "fighting"
+      ],
+      "properties": {
+        "fighting": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "weapons": {"$ref": "#/definitions/Weapons"}
+      }
+    },
+    "CharacterWarrior": {
+      "allOf": [
+        {"$ref": "#/definitions/Character"},
+        {"$ref": "#/definitions/Warrior"}
+      ]
+    },
+    "CharacterWizard": {
+      "allOf": [
+        {"$ref": "#/definitions/Character"},
+        {"$ref": "#/definitions/Wizard"}
+      ]
+    },
+    "CharacterMage": {
+      "allOf": [
+        {"$ref": "#/definitions/CharacterWizard"},
+        {
+          "type": "object",
+          "properties": {
+            "sorcery": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "weapons": {"$ref": "#/definitions/Weapons"}
+          },
+          "required": ["sorcery"]
+        }
+      ]
+    },
+    "Weapons": {
+      "type": "object",
+      "properties": {
+        "attack": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "defense": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

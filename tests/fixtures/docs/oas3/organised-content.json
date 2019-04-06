@@ -1,0 +1,19 @@
+{
+  "Introduction": {
+    "type": "page",
+    "content": "|introduction.md"
+  },
+  "Tutorial": {
+    "type": "section",
+    "content": {
+      "Part One": {
+        "type": "page",
+        "content": "|tutorial.part-one.md"
+      },
+      "Part Two": {
+        "type": "page",
+        "content": "|tutorial.part-two.md"
+      }
+    }
+  }
+}

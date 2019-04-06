@@ -1,0 +1,14 @@
+{
+  "Info": {
+    "type": "specification",
+    "content": "#/info"
+  },
+  "Operations": {
+    "type": "specification",
+    "content": "#/operations"
+  },
+  "Schemas": {
+    "type": "specification",
+    "content": "#/components/schemas"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "Introduction": {
+    "type": "page",
+    "content": "|introduction.md"
+  },
+  "Definitions": {
+    "type": "specification",
+    "content": "#/components/schemas"
+  }
+}
