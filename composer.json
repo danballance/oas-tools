@@ -28,7 +28,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.3",
         "jshannon63/jsoncollect": "^1.2",
