@@ -1,5 +1,7 @@
 # OAS Tools
 
+[![Join the chat at https://gitter.im/oas-tools/community](https://badges.gitter.im/oas-tools/community.svg)](https://gitter.im/oas-tools/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![Travis (.org)](https://img.shields.io/travis/danballance/oas-tools.svg)
 
 OAS Tools is a PHP library for working with Open API Specifications in both version 2 
