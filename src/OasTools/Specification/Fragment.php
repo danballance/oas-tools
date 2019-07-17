@@ -7,21 +7,13 @@ namespace DanBallance\OasTools\Specification;
  *
  * @package DanBallance\OasTools\Specification
  */
-class Fragment
+abstract class Fragment
 {
+    protected $spec;
     protected $path;
     protected $schema;
 
-    /**
-     * Fragment constructor.
-     * @param $path
-     * @param array $schema
-     */
-    public function __construct($path, array $schema)
-    {
-        $this->path = $path;
-        $this->schema = $schema;
-    }
+    abstract public function getSpec();
 
     /**
      * @return array

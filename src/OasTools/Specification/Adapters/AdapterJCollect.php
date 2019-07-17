@@ -26,6 +26,7 @@ abstract class AdapterJCollect
      * @return JCollect
      */
     abstract protected function makeSchema(array $array) : JCollect;
+    abstract protected function makeFragment(string $path, array $schema);
 
     /**
      * @return array
@@ -43,7 +44,7 @@ abstract class AdapterJCollect
     public function getExternalDocs() : Fragment
     {
         $collection = $this->getSpec()->getExternalDocs();
-        $fragment = new Fragment('#/externalDocs', $collection->toArray());
+        $fragment = $this->makeFragment('#/externalDocs', $collection->toArray());
         return $fragment;
     }
 
@@ -54,7 +55,7 @@ abstract class AdapterJCollect
     public function getInfo() : Fragment
     {
         $collection = $this->getSpec()->getInfo();
-        $fragment = new Fragment('#/info', $collection->toArray());
+        $fragment = $this->makeFragment('#/info', $collection->toArray());
         return $fragment;
     }
 
@@ -65,7 +66,7 @@ abstract class AdapterJCollect
     public function getSecurity() : Fragment
     {
         $collection = $this->getSpec()->getSecurity();
-        $fragment = new Fragment('#/security', $collection->toArray());
+        $fragment = $this->makeFragment('#/security', $collection->toArray());
         return $fragment;
     }
 
@@ -76,7 +77,7 @@ abstract class AdapterJCollect
     public function getServers() : Fragment
     {
         $collection = $this->getSpec()->getServers();
-        $fragment = new Fragment('#/servers', $collection->toArray());
+        $fragment = $this->makeFragment('#/servers', $collection->toArray());
         return $fragment;
     }
 
@@ -87,7 +88,7 @@ abstract class AdapterJCollect
     public function getTags() : Fragment
     {
         $collection = $this->getSpec()->getTags();
-        $fragment = new Fragment('#/tags', $collection->toArray());
+        $fragment = $this->makeFragment('#/tags', $collection->toArray());
         return $fragment;
     }
 
@@ -98,7 +99,18 @@ abstract class AdapterJCollect
     public function getPaths() : Fragment
     {
         $collection = $this->getSpec()->getPaths();
-        $fragment = new Fragment('#/paths', $collection->toArray());
+        $fragment = $this->makeFragment('#/paths', $collection->toArray());
+        return $fragment;
+    }
+
+    /**
+     * @return Fragment
+     * @throws JsonParseError
+     */
+    public function getPath(string $path) : Fragment
+    {
+        $collection = $this->getSpec()->getPath($path);
+        $fragment = $this->makeFragment($path, $collection->toArray());
         return $fragment;
     }
 
@@ -109,7 +121,7 @@ abstract class AdapterJCollect
     public function getOperations() : Fragment
     {
         $collection = $this->getSpec()->getOperations();
-        $fragment = new Fragment('#/operations', $collection->toArray());
+        $fragment = $this->makeFragment('#/operations', $collection->toArray());
         return $fragment;
     }
 
@@ -120,7 +132,7 @@ abstract class AdapterJCollect
     public function getOperationIds() : Fragment
     {
         $collection = $this->getSpec()->getOperationIds();
-        $fragment = new Fragment('#/operationIds', $collection->toArray());
+        $fragment = $this->makeFragment('#/operationIds', $collection->toArray());
         return $fragment;
     }
 
@@ -131,7 +143,7 @@ abstract class AdapterJCollect
     public function getOperationsByTag() : Fragment
     {
         $collection = $this->getSpec()->getOperationsByTag();
-        $fragment = new Fragment('#/operations[tag]', $collection->toArray());
+        $fragment = $this->makeFragment('#/operations[tag]', $collection->toArray());
         return $fragment;
     }
 
@@ -144,7 +156,7 @@ abstract class AdapterJCollect
     public function getOperation(string $id) : Fragment
     {
         $collection = $this->getSpec()->getOperation($id);
-        $fragment = new Fragment(
+        $fragment = $this->makeFragment(
             "#/operations/{$id}",
             $collection->toArray()
         );
@@ -171,7 +183,7 @@ abstract class AdapterJCollect
     {
         $collection = new JsonCollect($schema->toArray());
         $collection = $this->getSpec()->resolve($collection);
-        return new Fragment(
+        return $this->makeFragment(
             $schema->path(),
             $collection->toArray()
         );

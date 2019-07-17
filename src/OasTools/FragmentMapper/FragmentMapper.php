@@ -16,20 +16,9 @@ use Exception;
 abstract class FragmentMapper
 {
     abstract protected function getPathParts(string $path) : array;
-    abstract protected function makeCollection(array $schema) : JCollect;
+    abstract protected function makeFragment(string $path, array $schema);
 
     protected $schema;
-    protected $collection;
-
-    /**
-     * FragmentMapper constructor.
-     * @param array $schema
-     */
-    public function __construct(array $schema)
-    {
-        $this->schema = $schema;
-        $this->collection = $this->makeCollection($schema);
-    }
 
     /**
      * @param string $path
@@ -63,7 +52,7 @@ abstract class FragmentMapper
     public function pathToSchema(string $path) : Fragment
     {
         $schemaPart = $this->getSchemaPart($path);
-        return new Fragment($path, $schemaPart);
+        return $this->makeFragment($path, $schemaPart);
     }
 
     /**
@@ -94,7 +83,7 @@ abstract class FragmentMapper
      */
     protected function getPaths() : array
     {
-        return $this->collection->getPaths()->toArray();
+        return $this->schema->getPaths()->toArray();
     }
 
     /**
@@ -102,7 +91,7 @@ abstract class FragmentMapper
      */
     protected function getOperations() : array
     {
-        return $this->collection->getOperations()->toArray();
+        return $this->schema->getOperations()->toArray();
     }
 
     /**
@@ -111,7 +100,7 @@ abstract class FragmentMapper
      */
     protected function getPath(string $id) : array
     {
-        return $this->collection->getPath($id)->toArray();
+        return $this->schema->getPath($id)->toArray();
     }
 
     /**
@@ -121,7 +110,7 @@ abstract class FragmentMapper
      */
     protected function getOperation(string $id) : array
     {
-        return $this->collection->getOperation($id)->toArray();
+        return $this->schema->getOperation($id)->toArray();
     }
 
     /**
