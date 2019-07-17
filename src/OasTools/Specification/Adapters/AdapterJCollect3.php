@@ -8,6 +8,7 @@ use DanBallance\OasTools\Exceptions\JsonParseError;
 use DanBallance\OasTools\Exceptions\SchemaNotFound;
 use DanBallance\OasTools\Specification\Specification3Interface;
 use DanBallance\OasTools\Specification\Fragment;
+use DanBallance\OasTools\Specification\Fragment3;
 use GuzzleHttp\Client;
 
 /**
@@ -33,6 +34,11 @@ class AdapterJCollect3 extends AdapterJCollect implements Specification3Interfac
         $this->guzzle = $client;
     }
 
+    protected function makeFragment(string $path, array $schema) : Fragment3
+    {
+        return new Fragment3($this, $path, $schema);
+    }
+
     /**
      * @return Fragment
      * @throws JsonParseError
@@ -40,7 +46,7 @@ class AdapterJCollect3 extends AdapterJCollect implements Specification3Interfac
     public function getParameters() : Fragment
     {
         $collection = $this->getSpec()->getParameters();
-        $fragment = new Fragment('#/components/parameters', $collection->toArray());
+        $fragment = $this->makeFragment('#/components/parameters', $collection->toArray());
         return $fragment;
     }
 
@@ -51,7 +57,7 @@ class AdapterJCollect3 extends AdapterJCollect implements Specification3Interfac
     public function getResponses() : Fragment
     {
         $collection = $this->getSpec()->getResponses();
-        $fragment = new Fragment('#/components/responses', $collection->toArray());
+        $fragment = $this->makeFragment('#/components/responses', $collection->toArray());
         return $fragment;
     }
 
@@ -63,7 +69,7 @@ class AdapterJCollect3 extends AdapterJCollect implements Specification3Interfac
     public function getSchemas() : Fragment
     {
         $collection = $this->getSpec()->getSchemas();
-        $fragment = new Fragment('#/components/schemas', $collection->toArray());
+        $fragment = $this->makeFragment('#/components/schemas', $collection->toArray());
         return $fragment;
     }
 
@@ -80,7 +86,7 @@ class AdapterJCollect3 extends AdapterJCollect implements Specification3Interfac
     public function getSchema(string $id, $resolveReferences = false, array $exclude = []) : Fragment
     {
         $collection = $this->getSpec()->getSchema($id, $resolveReferences, $exclude);
-        $fragment = new Fragment("#/components/schemas/{$id}", $collection->toArray());
+        $fragment = $this->makeFragment("#/components/schemas/{$id}", $collection->toArray());
         return $fragment;
     }
 

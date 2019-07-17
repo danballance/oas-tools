@@ -4,6 +4,7 @@ namespace DanBallance\OasTools\Tests;
 
 use DanBallance\OasTools\FragmentMapper\FragmentMapper3;
 use DanBallance\OasTools\Specification\SchemaParser;
+use DanBallance\OasTools\Specification\Adapters\AdapterJCollect3;
 
 class FragmentMapper3Test extends \PHPUnit\Framework\TestCase
 {
@@ -130,6 +131,7 @@ class FragmentMapper3Test extends \PHPUnit\Framework\TestCase
     protected function specFromFile($filename)
     {
         $fullPath = dirname(__FILE__)  .'/fixtures/specifications/oas3/' . $filename;
-        return $this->parse($fullPath);
+        $this->schemaPath = $fullPath;
+        return new AdapterJCollect3($this->schemaPath);
     }
 }

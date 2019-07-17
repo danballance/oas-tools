@@ -2,9 +2,9 @@
 
 namespace DanBallance\OasTools\FragmentMapper;
 
-use DanBallance\OasTools\Collections\JCollect;
-use DanBallance\OasTools\Collections\JCollect2;
 use DanBallance\OasTools\Exceptions\SchemaNotFound;
+use DanBallance\OasTools\Specification\Specification2Interface;
+use DanBallance\OasTools\Specification\Fragment2;
 
 /**
  * Class FragmentMapper2
@@ -14,12 +14,17 @@ use DanBallance\OasTools\Exceptions\SchemaNotFound;
 class FragmentMapper2 extends FragmentMapper implements FragmentMapperInterface
 {
     /**
-     * @param array $schema
-     * @return JCollect
+     * FragmentMapper constructor.
+     * @param Specification2Interface $schema
      */
-    protected function makeCollection(array $schema) : JCollect
+    public function __construct(Specification2Interface $schema)
     {
-        return new JCollect2($schema);
+        $this->schema = $schema;
+    }
+
+    protected function makeFragment(string $path, array $schema) : Fragment2
+    {
+        return new Fragment2($this->schema, $path, $schema);
     }
 
     /**
@@ -47,7 +52,7 @@ class FragmentMapper2 extends FragmentMapper implements FragmentMapperInterface
      */
     protected function getDefinitions() : array
     {
-        return $this->collection->getSchemas()->toArray();
+        return $this->schema->getSchemas()->toArray();
     }
 
     /**
@@ -57,7 +62,7 @@ class FragmentMapper2 extends FragmentMapper implements FragmentMapperInterface
      */
     protected function getDefinition(string $id) : array
     {
-        return $this->collection->getSchema($id)->toArray();
+        return $this->schema->getSchema($id)->toArray();
     }
 
     /**

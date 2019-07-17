@@ -65,6 +65,11 @@ interface Specification2Interface
     /**
      * @return Fragment
      */
+    public function getPath(string $path) : Fragment;
+
+    /**
+     * @return Fragment
+     */
     public function getResponses() : Fragment;
 
     /**

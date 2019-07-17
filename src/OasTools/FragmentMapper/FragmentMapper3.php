@@ -2,10 +2,10 @@
 
 namespace DanBallance\OasTools\FragmentMapper;
 
-use DanBallance\OasTools\Collections\JCollect;
-use DanBallance\OasTools\Collections\JCollect3;
 use DanBallance\OasTools\Utils\ArrayUtil;
 use DanBallance\OasTools\Exceptions\SchemaNotFound;
+use DanBallance\OasTools\Specification\Specification3Interface;
+use DanBallance\OasTools\Specification\Fragment3;
 
 /**
  * Class FragmentMapper3
@@ -16,13 +16,20 @@ class FragmentMapper3 extends FragmentMapper implements FragmentMapperInterface
 {
     use ArrayUtil;
 
+
     /**
-     * @param array $schema
-     * @return JCollect
+     * FragmentMapper3 constructor.
+     * @param Specification3Interface $schema
      */
-    protected function makeCollection(array $schema) : JCollect
+    public function __construct(Specification3Interface $schema)
     {
-        return new JCollect3($schema);
+        $this->schema = $schema;
+    }
+
+
+    protected function makeFragment(string $path, array $schema) : Fragment3
+    {
+        return new Fragment3($this->schema, $path, $schema);
     }
 
     /**
@@ -51,7 +58,7 @@ class FragmentMapper3 extends FragmentMapper implements FragmentMapperInterface
      */
     protected function getSchemas() : array
     {
-        return $this->collection->getSchemas()->toArray();
+        return $this->schema->getSchemas()->toArray();
     }
 
     /**
@@ -61,7 +68,7 @@ class FragmentMapper3 extends FragmentMapper implements FragmentMapperInterface
      */
     protected function getSchema(string $id) : array
     {
-        return $this->collection->getSchema($id)->toArray();
+        return $this->schema->getSchema($id)->toArray();
     }
 
     /**
