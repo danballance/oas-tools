@@ -54,11 +54,11 @@ class FragmentMapper3Test extends \PHPUnit\Framework\TestCase
         $mapper = new FragmentMapper3($schema);
         $fragment = $mapper->pathToSchema('$/operations');
         $this->assertCount(
-            3,
+            4,
             $fragment->toArray()
         );
         $this->assertEquals(
-            ['GET /pets', 'POST /pets', 'GET /pets/{petId}'],
+            ['GET /pets', 'POST /pets', 'GET /pets/{petId}', 'DELETE /pets/{petId}'],
             array_keys($fragment->toArray())
         );
     }
@@ -90,6 +90,17 @@ class FragmentMapper3Test extends \PHPUnit\Framework\TestCase
                 ],
                 'method' => 'post',
                 'path' => '/pets',
+                'requestBody' => [
+                    'description' => 'Pet to add to the store',
+                    'required' => true,
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/NewPet'
+                            ]
+                        ]
+                    ]
+                ]
             ],
             $fragment->toArray()
         );
@@ -112,7 +123,7 @@ class FragmentMapper3Test extends \PHPUnit\Framework\TestCase
         $mapper = new FragmentMapper3($schema);
         $fragment = $mapper->pathToSchema('#/paths/\/pets\/{petId}');
         $this->assertEquals(
-            ['get'],
+            ['get', 'delete'],
             array_keys($fragment->toArray())
         );
     }

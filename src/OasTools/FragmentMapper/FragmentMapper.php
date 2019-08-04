@@ -4,28 +4,20 @@ namespace DanBallance\OasTools\FragmentMapper;
 
 use DanBallance\OasTools\Exceptions\SchemaParseError;
 use DanBallance\OasTools\Exceptions\SchemaNotFound;
-use DanBallance\OasTools\Specification\Fragment;
+use DanBallance\OasTools\Specification\Fragments\Fragment;
+use DanBallance\OasTools\Specification\Fragments\FragmentInterface;
 use DanBallance\OasTools\Collections\JCollect;
 use Exception;
 
-/**
- * Class FragmentMapper
- *
- * @package DanBallance\OasTools\FragmentMapper
- */
 abstract class FragmentMapper
 {
-    abstract protected function getPathParts(string $path) : array;
-    abstract protected function makeFragment(string $path, array $schema);
+    abstract protected function getPathParts(
+        string $path
+    ) : array;
 
     protected $schema;
 
-    /**
-     * @param string $path
-     * @return mixed
-     * @throws SchemaParseError
-     */
-    public function getId(string $path)
+    public function getId(string $path) : string
     {
         $matches = array();
         preg_match_all('!#/.*/(.*)$!', $path, $matches);
@@ -35,31 +27,24 @@ abstract class FragmentMapper
         throw new SchemaParseError("Path '{$path}' was not found in this schema");
     }
 
-    /**
-     * @param Fragment $fragment
-     * @return string
-     */
-    public function schemaToPath(Fragment $fragment) : string
+    public function schemaToPath(FragmentInterface $fragment) : string
     {
         return $fragment->path();
     }
 
-    /**
-     * @param string $path
-     * @return Fragment
-     * @throws Exception
-     */
-    public function pathToSchema(string $path) : Fragment
+    public function pathToSchema(string $path) : FragmentInterface
     {
         $schemaPart = $this->getSchemaPart($path);
         return $this->makeFragment($path, $schemaPart);
     }
 
-    /**
-     * @param string $path
-     * @return array
-     * @throws Exception
-     */
+    protected function makeFragment(
+        string $path,
+        array $schema
+    ) : FragmentInterface {
+        return new Fragment($this->schema, $path, $schema);
+    }
+
     protected function getSchemaPart(string $path) : array
     {
         list($type, $id) = $this->getPathParts($path);
@@ -78,44 +63,26 @@ abstract class FragmentMapper
         }
     }
 
-    /**
-     * @return array
-     */
     protected function getPaths() : array
     {
         return $this->schema->getPaths()->toArray();
     }
 
-    /**
-     * @return array
-     */
     protected function getOperations() : array
     {
         return $this->schema->getOperations()->toArray();
     }
 
-    /**
-     * @param string $id
-     * @return array
-     */
     protected function getPath(string $id) : array
     {
         return $this->schema->getPath($id)->toArray();
     }
 
-    /**
-     * @param string $id
-     * @return array
-     * @throws SchemaNotFound
-     */
     protected function getOperation(string $id) : array
     {
         return $this->schema->getOperation($id)->toArray();
     }
 
-    /**
-     * @return array
-     */
     protected function getSafeFuncs() : array
     {
         return ['getPaths', 'getOperations', 'getPath', 'getOperation', 'getId'];

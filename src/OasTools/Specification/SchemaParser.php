@@ -8,11 +8,6 @@ use DanBallance\OasTools\Exceptions\FileNotFound;
 use DanBallance\OasTools\Exceptions\JsonParseError;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * Trait SchemaParser
- *
- * @package DanBallance\OasTools\Specification
- */
 trait SchemaParser
 {
     protected $guzzle;

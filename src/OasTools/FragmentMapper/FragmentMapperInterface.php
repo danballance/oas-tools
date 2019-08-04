@@ -2,24 +2,10 @@
 
 namespace DanBallance\OasTools\FragmentMapper;
 
-use DanBallance\OasTools\Specification\Fragment;
+use DanBallance\OasTools\Specification\Fragments\FragmentInterface;
 
-/**
- * Interface FragmentMapperInterface
- *
- * @package DanBallance\OasTools\FragmentMapper
- */
 interface FragmentMapperInterface
 {
-    /**
-     * @param Fragment $schemaPart
-     * @return string
-     */
-    public function schemaToPath(Fragment $schemaPart) : string;
-
-    /**
-     * @param string $path
-     * @return Fragment
-     */
-    public function pathToSchema(string $path) : Fragment;
+    public function schemaToPath(FragmentInterface $schemaPart) : string;
+    public function pathToSchema(string $path) : FragmentInterface;
 }
