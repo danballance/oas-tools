@@ -3,6 +3,10 @@
 namespace DanBallance\OasTools\Tests;
 
 use DanBallance\OasTools\Specification\Adapters\AdapterJCollect3;
+use DanBallance\OasTools\Specification\Fragments\Fragment;
+use DanBallance\OasTools\Specification\Fragments\Operation;
+use DanBallance\OasTools\Specification\Fragments\Collection;
+use DanBallance\OasTools\Specification\Fragments\Schema;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
@@ -270,14 +274,14 @@ class AdapterJCollect3Test extends \PHPUnit\Framework\TestCase
     public function testGetSchemas()
     {
         $spec = $this->specFromFile('petstore-expanded-from-docs.yaml');
-        $fragment = $spec->getSchemas();
+        $collectionFragment = $spec->getSchemas();
         $this->assertEquals(
             ['Pet', 'Pets', 'Error'],
-            array_keys($fragment->toArray())
+            array_keys($collectionFragment->toArray())
         );
         $this->assertEquals(
             '#/components/schemas',
-            $fragment->path()
+            $collectionFragment->path()
         );
     }
 
@@ -470,7 +474,7 @@ class AdapterJCollect3Test extends \PHPUnit\Framework\TestCase
             array_keys($paths['/pets'])
         );
         $this->assertEquals(
-            ['get'],
+            ['get', 'delete'],
             array_keys($paths['/pets/{petId}'])
         );
         $this->assertEquals(
@@ -484,11 +488,11 @@ class AdapterJCollect3Test extends \PHPUnit\Framework\TestCase
         $spec = $this->specFromFile('petstore-expanded.yaml');
         $fragment =  $spec->getOperations();
         $this->assertCount(
-            3,
+            4,
             $fragment->toArray()
         );
         $this->assertEquals(
-            ['GET /pets', 'POST /pets', 'GET /pets/{petId}'],
+            ['GET /pets', 'POST /pets', 'GET /pets/{petId}', 'DELETE /pets/{petId}'],
             array_keys($fragment->toArray())
         );
         $this->assertEquals(
@@ -502,7 +506,7 @@ class AdapterJCollect3Test extends \PHPUnit\Framework\TestCase
         $spec = $this->specFromFile('petstore-expanded.yaml');
         $fragment = $spec->getOperationIds();
         $this->assertEquals(
-            ["listPets", "createPets", "showPetById"],
+            ['listPets', 'createPets', 'showPetById', 'deletePet'],
             $fragment->toArray()
         );
         $this->assertEquals(
