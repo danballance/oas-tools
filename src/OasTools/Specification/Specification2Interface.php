@@ -2,116 +2,49 @@
 
 namespace DanBallance\OasTools\Specification;
 
-/**
- * Interface Specification2Interface
- *
- * @package DanBallance\OasTools\Specification
- */
+use DanBallance\OasTools\Specification\Fragments\FragmentInterface;
+
 interface Specification2Interface
 {
-    /**
-     * @param string $id
-     * @return array
-     */
     public function getComposition(string $id) : array;
 
-    /**
-     * @return Fragment
-     */
-    public function getExternalDocs() : Fragment;
+    public function getExternalDocs() : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getInfo() : Fragment;
+    public function getInfo() : FragmentInterface;
 
-    /**
-     * @param string $id
-     * @return Fragment
-     */
-    public function getOperation(string $id) : Fragment;
+    public function getOperation(string $id) : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getOperationIds() : Fragment;
+    public function getOperationIds() : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getOperations() : Fragment;
+    public function getOperations() : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getOperationsByTag() : Fragment;
+    public function getOperationsByTag() : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getParameters() : Fragment;
+    public function getParameters() : FragmentInterface;
 
-    /**
-     * @param string $id
-     * @return string
-     */
     public function getPathByOperationId(string $id): string;
 
-    /**
-     * @return Fragment
-     */
-    public function getPaths() : Fragment;
+    public function getPaths() : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getPath(string $path) : Fragment;
+    public function getPath(string $path) : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getResponses() : Fragment;
+    public function getResponses() : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getSchemas() : Fragment;
+    public function getSchemas() : FragmentInterface;
 
-    /**
-     * @param string $id
-     * @param bool $resolveReferences
-     * @param array $exclude
-     * @return Fragment
-     */
     public function getSchema(
         string $id,
         $resolveReferences = false,
         array $exclude = []
-    ) : Fragment;
+    ) : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getSecurity() : Fragment;
+    public function getSecurity() : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getServers() : Fragment;
+    public function getServers() : FragmentInterface;
 
-    /**
-     * @return Fragment
-     */
-    public function getTags() : Fragment;
+    public function getTags() : FragmentInterface;
 
-    /**
-     * @param Fragment $fragment
-     * @return Fragment
-     */
-    public function resolve(Fragment $fragment): Fragment;
+    public function resolve(FragmentInterface $fragment): FragmentInterface;
 
-    /**
-     * @return array
-     */
     public function toArray() : array;
 }

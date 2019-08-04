@@ -2,44 +2,33 @@
 
 namespace DanBallance\OasTools\Collections;
 
-use Jshannon63\JsonCollect\JsonCollect;
+use DanBallance\OasTools\Collections\JsonCollect;
 
-/**
- * Class JCollect2
- *
- * @package DanBallance\OasTools\Collections
- */
 class JCollect2 extends JCollect
 {
     protected $specification;
 
-    /**
-     * @return JsonCollect
-     */
     public function getParameters() : JsonCollect
     {
-        return $this->specification->get('parameters');
+        return $this->cast(
+            $this->specification->get('parameters')
+        );
     }
 
-    /**
-     * @return JsonCollect
-     */
     public function getResponses() : JsonCollect
     {
-        return $this->specification->get('responses');
+        return $this->cast(
+            $this->specification->get('responses')
+        );
     }
 
-    /**
-     * @return JsonCollect
-     */
     public function getSchemas() : JsonCollect
     {
-        return $this->specification->get('definitions');
+        return $this->cast(
+            $this->specification->get('definitions')
+        );
     }
 
-    /**
-     * @return JsonCollect
-     */
     public function getServers() : JsonCollect
     {
         return new JsonCollect(

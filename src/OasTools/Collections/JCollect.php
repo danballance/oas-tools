@@ -3,79 +3,71 @@
 namespace DanBallance\OasTools\Collections;
 
 use DanBallance\OasTools\Exceptions\SchemaNotFound;
-use Jshannon63\JsonCollect\JsonCollect;
+use DanBallance\OasTools\Collections\JsonCollect;
+use Jshannon63\JsonCollect\JsonCollect as Collection;
 
 abstract class JCollect
 {
     protected $specification;
 
-    /**
-     * JCollect constructor.
-     * @param array $specification
-     */
     public function __construct(array $specification)
     {
         $this->specification = new JsonCollect($specification);
     }
 
-    /**
-     * @return JsonCollect
-     */
+    protected function cast($collection) : JsonCollect
+    {
+        if ($collection instanceof Collection) {
+            return new JsonCollect($collection->toArray());
+        }
+        return $collection;
+    }
+
     public function getExternalDocs() : JsonCollect
     {
-        return $this->specification->get('externalDocs');
+        return $this->cast(
+            $this->specification->get('externalDocs')
+        );
     }
 
-    /**
-     * @return JsonCollect
-     */
     public function getInfo() : JsonCollect
     {
-        return $this->specification->get('info');
+        return $this->cast(
+            $this->specification->get('info')
+        );
     }
 
-    /**
-     * @return JsonCollect
-     */
     public function getSecurity() : JsonCollect
     {
-        return $this->specification->get('security');
+        return $this->cast(
+            $this->specification->get('security')
+        );
     }
 
-    /**
-     * @return JsonCollect
-     */
     public function getTags() : JsonCollect
     {
-        return $this->specification->get('tags');
+        return $this->cast(
+            $this->specification->get('tags')
+        );
     }
 
-    /**
-     * @param string $id
-     * @param bool $resolveReferences
-     * @param array $exclude
-     * @return JsonCollect
-     * @throws SchemaNotFound
-     */
-    public function getSchema(string $id, $resolveReferences = false, $exclude = []) : JsonCollect
-    {
+    public function getSchema(
+        string $id,
+        $resolveReferences = false,
+        $exclude = []
+    ) : JsonCollect {
         $schema = $this->getSchemas()->get($id);
         if ($schema) {
             if ($resolveReferences) {
                 $schema = $this->resolve($schema, $exclude);
             }
-            return $schema;
+            return $this->cast($schema);
         }
         $msg = "Could not find schema '{$id}'.";
         throw new SchemaNotFound($msg);
     }
 
-    /**
-     * @param JsonCollect $schema
-     * @param array $exclude
-     * @return JsonCollect
-     */
-    public function resolve(JsonCollect $schema, $exclude = []) : JsonCollect
+    public function resolve($schema, $exclude = []) : JsonCollect
     {
         $schema = $schema->toArray();
         $schema = $this->resolveReferences($schema, $exclude);
@@ -102,11 +94,7 @@ abstract class JCollect
         return new JsonCollect($schema);
     }
 
-    /**
-     * @param JsonCollect $schema
-     * @return array
-     */
-    public function getComposition(JsonCollect $schema) : array
+    public function getComposition($schema) : array
     {
         $schema = $schema->toArray();
         $composition = [];
@@ -123,9 +111,7 @@ abstract class JCollect
     }
 
     /**
-     * @param array $schema
      * @param array $exclude array fields that we shouldn't recurse into
-     * @return array
      */
     protected function resolveReferences(array $schema, $exclude = []) : array
     {
@@ -143,12 +129,6 @@ abstract class JCollect
         return $schema;
     }
 
-    /**
-     * @param string $reference
-     * @param array $exclude
-     * @return array
-     * @throws SchemaNotFound
-     */
     protected function resolveRef(string $reference, $exclude = []) : array
     {
         $parts = explode('/', $reference);
@@ -160,9 +140,6 @@ abstract class JCollect
     /**
      * Merges schemas. Never overwrites schema1 if there's a shared key.
      * Proerties and required arrays are merged with array_merge
-     * @param array $schema1
-     * @param array $schema2
-     * @return array
      */
     protected function mergeSchema(array $schema1, array $schema2) : array
     {
@@ -184,86 +161,76 @@ abstract class JCollect
         return $schema1;
     }
 
-    /**
-     * @return JsonCollect
-     */
     public function getPaths() : JsonCollect
     {
-        return $this->specification->get('paths');
+        return $this->cast(
+            $this->specification->get('paths')
+        );
     }
 
-    /**
-     * @param string $path
-     * @return JsonCollect
-     */
     public function getPath(string $path) : JsonCollect
     {
-        return $this->specification->get('paths')[$path];
+        return $this->cast(
+            $this->specification->get('paths')[$path]
+        );
     }
 
-    /**
-     * @return JsonCollect
-     */
     public function getOperations() : JsonCollect
     {
-        return $this->specification
-            ->get('paths')
-            ->map(
-                function ($collection, $path) {
-                    return $collection->map(
-                        function ($operation, $method) use ($path) {
-                            $operation['path'] = $path;
-                            $operation['method'] = $method;
-                            return $operation;
-                        }
-                    );
-                }
-            )
-            ->flatten(1)
-            ->keyBy(
-                function ($operation) {
-                    return strtoupper($operation['method']) . " {$operation['path']}";
-                }
-            );
+        return $this->cast(
+            $this->specification
+                ->get('paths')
+                ->map(
+                    function ($collection, $path) {
+                        return $collection->map(
+                            function ($operation, $method) use ($path) {
+                                $operation['path'] = $path;
+                                $operation['method'] = $method;
+                                return $operation;
+                            }
+                        );
+                    }
+                )
+                ->flatten(1)
+                ->keyBy(
+                    function ($operation) {
+                        return strtoupper($operation['method']) . " {$operation['path']}";
+                    }
+                )
+        );
     }
 
-    /**
-     * @return JsonCollect
-     */
     public function getOperationIds() : JsonCollect
     {
-        return $this->getOperations()->pluck('operationId');
+        return $this->cast(
+            $this->getOperations()->pluck('operationId')
+        );
     }
 
     /**
      * Fetch the operations grouped by their first tag
-     *
-     * @return JsonCollect
      */
     public function getOperationsByTag() : JsonCollect
     {
-        return $this->getOperations()
-            ->groupBy(
-                function ($item, $key) {
-                    return $item['tags'][0];
-                }
-            )
-            ->map(
-                function ($collection) {
-                    return $collection->keyBy(
-                        function ($operation) {
-                            return strtoupper($operation['method']) . " {$operation['path']}";
-                        }
-                    );
-                }
-            );
+        return $this->cast(
+            $this->getOperations()
+                ->groupBy(
+                    function ($item, $key) {
+                        return $item['tags'][0];
+                    }
+                )
+                ->map(
+                    function ($collection) {
+                        return $collection->keyBy(
+                            function ($operation) {
+                                return strtoupper($operation['method']) . " {$operation['path']}";
+                            }
+                        );
+                    }
+                )
+        );
     }
 
-    /**
-     * @param string $id
-     * @return JsonCollect
-     * @throws SchemaNotFound
-     */
     public function getOperation(string $id) : JsonCollect
     {
         $operations = $this->getOperations();
@@ -273,17 +240,14 @@ abstract class JCollect
             }
         );
         if ($key) {
-            return $operations->get($key);
+            return $this->cast(
+                $operations->get($key)
+            );
         }
         $msg = "Could find an operation for operationId '{$id}'.";
         throw new SchemaNotFound($msg);
     }
 
-    /**
-     * @param string $id
-     * @return string
-     * @throws SchemaNotFound
-     */
     public function getPathByOperationId(string $id): string
     {
         foreach ($this->getPaths() as $path => $operations) {
@@ -300,9 +264,6 @@ abstract class JCollect
         throw new SchemaNotFound($msg);
     }
 
-    /**
-     * @return mixed
-     */
     public function toArray()
     {
         return $this->specification->toArray();
